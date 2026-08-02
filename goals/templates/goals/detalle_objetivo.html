@@ -1,15 +1,28 @@
+<!-- 
+    detalle_objetivo.html
+    Plantilla de detalle del modelo principal (Objetivo).
+    Hereda la estructura común desde base.html mediante {% extends %}.
+-->
 {% extends 'goals/base.html' %}
 
+<!-- Sobrescribimos el bloque 'titulo' definido en base.html,
+     usando la descripción del objetivo como título de la pestaña -->
 {% block titulo %}{{ objetivo.descripcion }}{% endblock %}
 
 {% block contenido %}
     <h2>{{ objetivo.descripcion }}</h2>
 
     <ul>
+        <!-- get_area_display y get_dificultad_display son métodos automáticos
+             que genera Django para campos con 'choices': devuelven el texto
+             legible (ej. "Lenguaje") en lugar del valor guardado en la base
+             de datos (ej. "lenguaje") -->
         <li><strong>Área:</strong> {{ objetivo.get_area_display }}</li>
         <li><strong>Dificultad:</strong> {{ objetivo.get_dificultad_display }}</li>
         <li><strong>Edad recomendada:</strong> de {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años</li>
     </ul>
 
+    <!-- Enlace de vuelta al listado, generado con {% url %} a partir
+         del 'name' definido en urls.py -->
     <a href="{% url 'lista_objetivos' %}">← Volver al catálogo</a>
 {% endblock %}

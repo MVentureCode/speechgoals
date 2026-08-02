@@ -1,3 +1,11 @@
+"""
+admin.py
+Registra los modelos en el panel de administración de Django (/admin),
+personalizando cómo se ven y gestionando los registros. Django ya permite
+crear, editar y eliminar por defecto al usar ModelAdmin; aquí solo se
+ajusta la presentación (columnas, filtros, búsqueda).
+"""
+
 from django.contrib import admin
 from .models import Diagnostico, Paciente, Objetivo, PlanTratamiento
 

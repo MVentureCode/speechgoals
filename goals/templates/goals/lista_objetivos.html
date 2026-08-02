@@ -1,3 +1,9 @@
+<!-- 
+    lista_objetivos.html
+    Plantilla de listado del modelo principal (Objetivo).
+    Hereda la estructura común desde base.html mediante {% extends %}.
+    Incluye un formulario de filtro por área y edad.
+-->
 {% extends 'goals/base.html' %}
 
 {% block titulo %}Catálogo de objetivos{% endblock %}
@@ -5,12 +11,18 @@
 {% block contenido %}
     <h2>Catálogo de objetivos</h2>
 
-    <!-- Formulario con dos filtros: área (selector) y edad (campo numérico) -->
+    <!-- Formulario con dos filtros: área (selector) y edad (campo numérico).
+         method="get" envía los valores como parámetros en la URL
+         (ej: ?area=habla&edad=5), que la vista lee con request.GET -->
     <form method="get">
         <label for="area">Área:</label>
         <select name="area" id="area" onchange="this.form.submit()">
             <option value="">-- Todas --</option>
+            <!-- Recorremos AREA_CHOICES, recibido desde la vista como 'areas'.
+                 Cada elemento es una tupla (valor_guardado, texto_visible) -->
             {% for valor, etiqueta in areas %}
+                <!-- 'selected' se activa si esta opción coincide con el
+                     área actualmente filtrada, para recordar la selección -->
                 <option value="{{ valor }}" {% if valor == area_seleccionada %}selected{% endif %}>
                     {{ etiqueta }}
                 </option>
@@ -27,8 +39,11 @@
     </form>
 
     <ul>
+        <!-- 'objetivos' llega desde la vista ya filtrado según los
+             parámetros seleccionados en el formulario -->
         {% for objetivo in objetivos %}
             <li>
+                <!-- Enlace al detalle, usando el name definido en urls.py -->
                 <a href="{% url 'detalle_objetivo' objetivo.id %}">
                     {{ objetivo.descripcion }}
                 </a>
@@ -36,6 +51,7 @@
                 — Edad recomendada: {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años
             </li>
         {% empty %}
+            <!-- Se muestra solo si el filtro no encuentra ningún resultado -->
             <li>No hay objetivos que coincidan con el filtro seleccionado.</li>
         {% endfor %}
     </ul>

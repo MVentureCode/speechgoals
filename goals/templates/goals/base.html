@@ -1,7 +1,16 @@
+<!-- 
+    base.html
+    Plantilla base del proyecto. Define la estructura común (header, nav)
+    que se repite en todas las páginas. Las demás plantillas heredan de
+    este archivo usando {% extends 'goals/base.html' %} y solo rellenan
+    los bloques definidos aquí con {% block %}.
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <!-- El título cambia según la página; cada plantilla hija puede
+         sobrescribir este bloque con su propio título -->
     <title>{% block titulo %}SpeechGoals{% endblock %}</title>
 </head>
 <body>
@@ -9,12 +18,17 @@
     <header>
         <h1>SpeechGoals</h1>
         <nav>
+            <!-- {% url %} genera el enlace automáticamente a partir del
+                 'name' definido en urls.py, en vez de escribir la ruta a mano -->
             <a href="{% url 'lista_objetivos' %}">Catálogo de objetivos</a>
         </nav>
         <hr>
     </header>
 
     <main>
+        <!-- Bloque de contenido: aquí es donde cada plantilla hija
+             (lista_objetivos.html, detalle_objetivo.html, etc.)
+             inserta su propio contenido específico -->
         {% block contenido %}
         {% endblock %}
     </main>
