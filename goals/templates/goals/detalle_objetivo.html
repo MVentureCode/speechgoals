@@ -1,0 +1,15 @@
+{% extends 'goals/base.html' %}
+
+{% block titulo %}{{ objetivo.descripcion }}{% endblock %}
+
+{% block contenido %}
+    <h2>{{ objetivo.descripcion }}</h2>
+
+    <ul>
+        <li><strong>Área:</strong> {{ objetivo.get_area_display }}</li>
+        <li><strong>Dificultad:</strong> {{ objetivo.get_dificultad_display }}</li>
+        <li><strong>Edad recomendada:</strong> de {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años</li>
+    </ul>
+
+    <a href="{% url 'lista_objetivos' %}">← Volver al catálogo</a>
+{% endblock %}

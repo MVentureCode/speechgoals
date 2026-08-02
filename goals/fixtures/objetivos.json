@@ -1,0 +1,167 @@
+[
+  {
+    "model": "goals.objetivo",
+    "pk": 2,
+    "fields": {
+      "area": "habla",
+      "descripcion": "Praxias linguales básicas",
+      "dificultad": 1,
+      "edad_minima": 2,
+      "edad_maxima": 5
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 3,
+    "fields": {
+      "area": "habla",
+      "descripcion": "Corregir sustitución de /r/ por /d/",
+      "dificultad": 2,
+      "edad_minima": 4,
+      "edad_maxima": 8
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 4,
+    "fields": {
+      "area": "habla",
+      "descripcion": "Discriminación auditiva de fonemas similares",
+      "dificultad": 2,
+      "edad_minima": 5,
+      "edad_maxima": 9
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 5,
+    "fields": {
+      "area": "habla",
+      "descripcion": "Automatización de fonema /s/ en habla espontánea",
+      "dificultad": 3,
+      "edad_minima": 6,
+      "edad_maxima": 10
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 6,
+    "fields": {
+      "area": "lenguaje",
+      "descripcion": "Ampliar vocabulario de uso frecuente",
+      "dificultad": 1,
+      "edad_minima": 2,
+      "edad_maxima": 5
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 7,
+    "fields": {
+      "area": "lenguaje",
+      "descripcion": "Formar oraciones de 3-4 palabras",
+      "dificultad": 2,
+      "edad_minima": 3,
+      "edad_maxima": 6
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 8,
+    "fields": {
+      "area": "lenguaje",
+      "descripcion": "Uso correcto de tiempos verbales pasados",
+      "dificultad": 2,
+      "edad_minima": 4,
+      "edad_maxima": 7
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 9,
+    "fields": {
+      "area": "lenguaje",
+      "descripcion": "Comprensión de narraciones cortas",
+      "dificultad": 3,
+      "edad_minima": 5,
+      "edad_maxima": 9
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 10,
+    "fields": {
+      "area": "comunicacion",
+      "descripcion": "Iniciar contacto visual en interacción",
+      "dificultad": 1,
+      "edad_minima": 1,
+      "edad_maxima": 4
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 11,
+    "fields": {
+      "area": "comunicacion",
+      "descripcion": "Uso de gestos comunicativos básicos",
+      "dificultad": 1,
+      "edad_minima": 1,
+      "edad_maxima": 3
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 12,
+    "fields": {
+      "area": "comunicacion",
+      "descripcion": "Turnos de conversación con un interlocutor",
+      "dificultad": 2,
+      "edad_minima": 4,
+      "edad_maxima": 8
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 13,
+    "fields": {
+      "area": "comunicacion",
+      "descripcion": "Interpretar intenciones comunicativas no verbales",
+      "dificultad": 3,
+      "edad_minima": 6,
+      "edad_maxima": 12
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 14,
+    "fields": {
+      "area": "deglucion",
+      "descripcion": "Mejorar control del bolo alimenticio",
+      "dificultad": 3,
+      "edad_minima": 0,
+      "edad_maxima": 3
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 15,
+    "fields": {
+      "area": "deglucion",
+      "descripcion": "Fortalecimiento de musculatura orofacial",
+      "dificultad": 2,
+      "edad_minima": 1,
+      "edad_maxima": 5
+    }
+  },
+  {
+    "model": "goals.objetivo",
+    "pk": 16,
+    "fields": {
+      "area": "deglucion",
+      "descripcion": "Coordinación succión-deglución-respiración",
+      "dificultad": 3,
+      "edad_minima": 0,
+      "edad_maxima": 2
+    }
+  }
+]

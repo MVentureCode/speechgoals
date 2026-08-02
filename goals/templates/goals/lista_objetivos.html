@@ -1,0 +1,42 @@
+{% extends 'goals/base.html' %}
+
+{% block titulo %}Catálogo de objetivos{% endblock %}
+
+{% block contenido %}
+    <h2>Catálogo de objetivos</h2>
+
+    <!-- Formulario con dos filtros: área (selector) y edad (campo numérico) -->
+    <form method="get">
+        <label for="area">Área:</label>
+        <select name="area" id="area" onchange="this.form.submit()">
+            <option value="">-- Todas --</option>
+            {% for valor, etiqueta in areas %}
+                <option value="{{ valor }}" {% if valor == area_seleccionada %}selected{% endif %}>
+                    {{ etiqueta }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="edad">Edad del paciente:</label>
+        <input type="number" name="edad" id="edad" min="0" max="120"
+               value="{{ edad_seleccionada|default:'' }}">
+
+        <!-- Botón para aplicar el filtro de edad (el campo numérico no
+             puede auto-enviarse igual de bien que un <select>) -->
+        <button type="submit">Buscar</button>
+    </form>
+
+    <ul>
+        {% for objetivo in objetivos %}
+            <li>
+                <a href="{% url 'detalle_objetivo' objetivo.id %}">
+                    {{ objetivo.descripcion }}
+                </a>
+                — Área: {{ objetivo.get_area_display }}
+                — Edad recomendada: {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años
+            </li>
+        {% empty %}
+            <li>No hay objetivos que coincidan con el filtro seleccionado.</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

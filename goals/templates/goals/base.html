@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block titulo %}SpeechGoals{% endblock %}</title>
+</head>
+<body>
+
+    <header>
+        <h1>SpeechGoals</h1>
+        <nav>
+            <a href="{% url 'lista_objetivos' %}">Catálogo de objetivos</a>
+        </nav>
+        <hr>
+    </header>
+
+    <main>
+        {% block contenido %}
+        {% endblock %}
+    </main>
+
+</body>
+</html>
