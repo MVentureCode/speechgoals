@@ -3,7 +3,6 @@ from . import views
 
 # Cada 'path' conecta una URL con la función de views.py que la atiende.
 # El parámetro 'name' permite referenciar la URL desde los templates
-# usando {% url 'nombre' %} en lugar de escribir la ruta a mano.
 
 urlpatterns = [
     # Ruta raíz del sitio: muestra directamente el catálogo de objetivos
