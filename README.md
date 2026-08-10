@@ -143,7 +143,6 @@ Y cerrar sesión mediante: /logout/
 Las acciones de creación y edición de objetivos requieren que el usuario haya iniciado sesión.
 
 ## Ejemplos de búsqueda, filtros y ordenación
-
 ### Buscar por texto
 /objetivos/?q=lenguaje
 
@@ -201,7 +200,6 @@ El modelo `Paciente` no almacena:
 * Otros datos identificativos
 El proyecto no debe utilizarse con datos clínicos reales sin implementar previamente las medidas de seguridad, privacidad y protección de datos correspondientes.
 
-
 ## Estado del proyecto
 **En desarrollo.**
 Esta versión corresponde a la implementación de funcionalidades de navegación y organización de datos con Django, incluyendo:
@@ -223,4 +221,4 @@ Logopeda y desarrolladora en formación.
 Proyecto orientado a la aplicación de tecnologías web y herramientas digitales al ámbito de la logopedia.
 
 ## Fecha de creación
-Junio 2026
+Julio 2026
