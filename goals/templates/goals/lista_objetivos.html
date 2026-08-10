@@ -1,58 +1,273 @@
-<!-- 
-    lista_objetivos.html
-    Plantilla de listado del modelo principal (Objetivo).
-    Hereda la estructura común desde base.html mediante extends.
-    Incluye un formulario de filtro por área y edad.
--->
 {% extends 'goals/base.html' %}
 
 {% block titulo %}Catálogo de objetivos{% endblock %}
 
 {% block contenido %}
-    <h2>Catálogo de objetivos</h2>
 
-    <!-- Formulario con dos filtros: área (selector) y edad (campo numérico).
-         method="get" envía los valores como parámetros en la URL
-         (ej: ?area=habla&edad=5), que la vista lee con request.GET -->
-    <form method="get">
-        <label for="area">Área:</label>
-        <select name="area" id="area" onchange="this.form.submit()">
-            <option value="">-- Todas --</option>
-            <!-- Recorremos AREA_CHOICES, recibido desde la vista como 'areas'.
-                 Cada elemento es una tupla (valor_guardado, texto_visible) -->
-            {% for valor, etiqueta in areas %}
-                <!-- 'selected' se activa si esta opción coincide con el
-                     área actualmente filtrada, para recordar la selección -->
-                <option value="{{ valor }}" {% if valor == area_seleccionada %}selected{% endif %}>
-                    {{ etiqueta }}
-                </option>
-            {% endfor %}
-        </select>
+<h2>Catálogo de objetivos</h2>
 
-        <label for="edad">Edad del paciente:</label>
-        <input type="number" name="edad" id="edad" min="0" max="120"
-               value="{{ edad_seleccionada|default:'' }}">
 
-        <!-- Botón para aplicar el filtro de edad (el campo numérico no
-             puede auto-enviarse igual de bien que un <select>) -->
-        <button type="submit">Buscar</button>
-    </form>
+<!-- =====================================================
+     BÚSQUEDA Y FILTROS
+     ===================================================== -->
 
-    <ul>
-        <!-- 'objetivos' llega desde la vista ya filtrado según los
-             parámetros seleccionados en el formulario -->
-        {% for objetivo in objetivos %}
-            <li>
-                <!-- Enlace al detalle, usando el name definido en urls.py -->
-                <a href="{% url 'goals:detalle_objetivo' objetivo.id %}">
-                    {{ objetivo.descripcion }}
-                </a>
-                — Área: {{ objetivo.get_area_display }}
-                — Edad recomendada: {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años
-            </li>
-        {% empty %}
-            <!-- Se muestra solo si el filtro no encuentra ningún resultado -->
-            <li>No hay objetivos que coincidan con el filtro seleccionado.</li>
+<!-- Formulario de búsqueda y filtros.
+method="get" hace que los valores del formulario
+se envíen como parámetros en la URL.
+Ejemplo:
+? q=lenguaje & area=habla & edad=5
+La vista recupera estos valores mediante request.GET. -->
+
+<form method="get">
+
+    <!-- Búsqueda por texto.
+
+    name="q" es importante porque la vista busca
+    este parámetro mediante request.GET.get('q').
+    value="{{ busqueda|default:'' }}" permite conservar
+    el texto que el usuario escribió después de buscar. -->
+
+    <label for="q">Buscar:</label>
+
+    <input
+        type="text"
+        name="q"
+        id="q"
+        placeholder="Ej: instrucciones"
+        value="{{ busqueda|default:'' }}"
+    >
+
+
+    <!-- Filtro por área.
+     El usuario puede seleccionar una de las áreas
+    disponibles en AREA_CHOICES. -->
+
+    <label for="area">Área:</label>
+
+    <select name="area" id="area">
+
+        <!-- Valor vacío significa que no queremos
+        filtrar por ninguna área. -->
+
+        <option value="">-- Todas --</option>
+
+        <!-- Recorremos las áreas recibidas desde la vista
+        mediante el contexto 'areas'. 
+        Cada elemento de AREA_CHOICES contiene:
+        valor guardado en la base de datos
+        + etiqueta visible. -->
+
+        {% for valor, etiqueta in areas %}
+
+            <!-- 'selected' mantiene seleccionada el área
+            que el usuario había elegido anteriormente. -->
+
+            <option
+                value="{{ valor }}"
+                {% if valor == area_seleccionada %}selected{% endif %}
+            >
+                {{ etiqueta }}
+            </option>
+
         {% endfor %}
-    </ul>
+    </select>
+
+    <!-- Filtro por edad.
+     El usuario introduce una edad y Django buscará 
+     objetivos cuyo rango incluya esa edad.
+     Ejemplo: edad = 5
+     Buscará objetivos donde:
+     edad_minima <= 5 <= edad_maxima -->
+
+    <label for="edad">Edad del paciente:</label>
+
+    <input
+        type="number"
+        name="edad"
+        id="edad"
+        min="0"
+        max="120"
+        value="{{ edad_seleccionada|default:'' }}"
+    >
+
+    <!-- Al pulsar el botón se envían todos los valores
+    mediante el método GET. -->
+
+    <button type="submit">
+        Buscar
+    </button>
+</form>
+
+<hr>
+
+<!-- =====================================================
+     ORDENACIÓN
+     ===================================================== -->
+
+<!-- Formulario de ordenación.
+Utilizamos GET para que el criterio de orden
+aparezca en la URL.
+Ejemplo: ?order=dificultad&dir=asc -->
+
+
+<form method="get">
+
+    <!-- CAMPOS OCULTOS
+    Estos campos permiten conservar la búsqueda y los filtros actuales 
+    cuando cambiamos el criterio de orden.
+    Por ejemplo, si tenemos:
+    ?q=lenguaje&area=lenguaje&edad=5
+    y seleccionamos dificultad, no queremos perder los filtros anteriores. -->
+
+    <input
+        type="hidden"
+        name="q"
+        value="{{ busqueda|default:'' }}"
+    >
+
+    <input
+        type="hidden"
+        name="area"
+        value="{{ area_seleccionada|default:'' }}"
+    >
+
+    <input
+        type="hidden"
+        name="edad"
+        value="{{ edad_seleccionada|default:'' }}"
+    >
+
+
+    <!-- Selector del campo por el que queremos ordenar.
+     Las opciones coinciden con los campos permitidos
+     definidos en views.py -->
+
+    <label for="order">
+        Ordenar por:
+    </label>
+
+    <select name="order" id="order">
+
+        <option
+            value="descripcion"
+            {% if orden == 'descripcion' %}selected{% endif %}
+        >
+            Descripción
+        </option>
+
+        <option
+            value="area"
+            {% if orden == 'area' %}selected{% endif %}
+        >
+            Área
+        </option>
+
+        <option
+            value="dificultad"
+            {% if orden == 'dificultad' %}selected{% endif %}
+        >
+            Dificultad
+        </option>
+
+        <option
+            value="edad_minima"
+            {% if orden == 'edad_minima' %}selected{% endif %}
+        >
+            Edad mínima
+        </option>
+
+        <option
+            value="edad_maxima"
+            {% if orden == 'edad_maxima' %}selected{% endif %}
+        >
+            Edad máxima
+        </option>
+
+    </select>
+
+
+    <!-- Selector de dirección.
+    asc  = ascendente
+    desc = descendente -->
+
+    <label for="dir">
+        Dirección:
+    </label>
+
+    <select name="dir" id="dir">
+
+        <option
+            value="asc"
+            {% if direccion == 'asc' %}selected{% endif %}
+        >
+            Ascendente
+        </option>
+
+        <option
+            value="desc"
+            {% if direccion == 'desc' %}selected{% endif %}
+        >
+            Descendente
+        </option>
+
+    </select>
+
+    <!-- Envía el formulario y aplica la ordenación -->
+
+    <button type="submit">
+        Ordenar
+    </button>
+
+</form>
+
+<hr>
+
+<!-- =====================================================
+     LISTA DE RESULTADOS
+     ===================================================== -->
+
+<!-- La variable 'objetivos' llega desde lista_objetivos()
+ya filtrada y ordenada por la vista -->
+
+<ul>
+
+    {% for objetivo in objetivos %}
+
+        <li>
+
+            <!-- Enlace al detalle del objetivo.
+             'goals:detalle_objetivo' corresponde al name
+             definido en goals/urls.py.
+             objetivo.id indica qué objetivo queremos consultar -->
+
+            <a href="{% url 'goals:detalle_objetivo' objetivo.id %}">
+                {{ objetivo.descripcion }}
+            </a>
+
+            —
+            Área: {{ objetivo.get_area_display }}
+
+            —
+            Dificultad: {{ objetivo.get_dificultad_display }}
+
+            —
+            Edad recomendada:
+            {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años
+
+        </li>
+
+
+    {% empty %}
+
+        <!-- Si ningún objetivo coincide con la búsqueda
+        o los filtros seleccionados, mostramos este mensaje -->
+
+        <li>
+            No hay objetivos que coincidan con los criterios de búsqueda.
+        </li>
+
+    {% endfor %}
+
+</ul>
+
 {% endblock %}
