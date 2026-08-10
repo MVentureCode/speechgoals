@@ -44,7 +44,7 @@
         {% for objetivo in objetivos %}
             <li>
                 <!-- Enlace al detalle, usando el name definido en urls.py -->
-                <a href="{% url 'detalle_objetivo' objetivo.id %}">
+                <a href="{% url 'goals:detalle_objetivo' objetivo.id %}">
                     {{ objetivo.descripcion }}
                 </a>
                 — Área: {{ objetivo.get_area_display }}

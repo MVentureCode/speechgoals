@@ -1,6 +1,11 @@
 from django.urls import path
 from . import views
 
+# Nombre de la aplicación.
+# Permite utilizar espacios de nombres en las URLs desde los templates.
+# Por ejemplo: {% url 'goals:lista_objetivos' %}
+app_name = 'goals'
+
 # Cada 'path' conecta una URL con la función de views.py que la atiende.
 # El parámetro 'name' permite referenciar la URL desde los templates.
 
@@ -57,5 +62,13 @@ urlpatterns = [
         'objetivos/editar/<int:objetivo_id>/',
         views.editar_objetivo,
         name='editar_objetivo'
+    ),
+
+    # --- Registro de usuarios ---
+    # Permite que un usuario cree una cuenta nueva.
+    path(
+        'registro/',
+        views.registro,
+        name='registro'
     ),
 ]

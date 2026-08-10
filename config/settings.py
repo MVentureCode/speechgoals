@@ -116,3 +116,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Después de iniciar sesión, Django lleva al usuario al catálogo.
+LOGIN_REDIRECT_URL = '/'
+
+# Después de cerrar sesión, Django lleva al usuario al catálogo.
+LOGOUT_REDIRECT_URL = '/'

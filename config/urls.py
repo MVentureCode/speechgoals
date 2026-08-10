@@ -19,6 +19,13 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
+    # Panel de administración de Django.
     path('admin/', admin.site.urls),
-    path('', include('goals.urls')),  # conecta las URLs de la app
+
+    # URLs de la aplicación SpeechGoals.
+    path('', include('goals.urls')),
+
+    # URLs de autenticación proporcionadas por Django.
+    # Incluye login, logout y otras funcionalidades de autenticación.
+    path('accounts/', include('django.contrib.auth.urls')),
 ]

@@ -1,0 +1,36 @@
+{% extends 'goals/base.html' %}
+
+{% block contenido %}
+
+    <!-- Este template sirve tanto para crear como para editar un objetivo terapéutico.
+
+    La variable 'titulo' viene desde views.py y nos permite mostrar un título diferente 
+    según la operación. -->
+    <h2>{{ titulo }}</h2>
+
+    <!-- Utilizamos POST porque estamos enviando información 
+    al servidor para crear o modificar un registro. -->
+    <form method="post">
+
+        <!-- Token de seguridad obligatorio en formularios POST
+        de Django. Protege contra ataques CSRF. -->
+        {% csrf_token %}
+
+        <!-- Django genera automáticamente los campos definidos
+        en ObjetivoForm. -->
+        {{ form.as_p }}
+
+        <!-- Botón para enviar el formulario -->
+        <button type="submit">
+            Guardar objetivo
+        </button>
+
+    </form>
+
+    <!-- Si el usuario decide no guardar los cambios,
+    puede volver al catálogo. -->
+    <a href="{% url 'goals:lista_objetivos' %}">
+        Cancelar
+    </a>
+
+{% endblock %}

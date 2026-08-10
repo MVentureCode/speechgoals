@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Paciente, Objetivo, Diagnostico, AREA_CHOICES
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import UserCreationForm
+
+from .models import Paciente, Objetivo, Diagnostico, AREA_CHOICES
+from .forms import ObjetivoForm
 
 
 def lista_pacientes(request):
@@ -127,4 +130,40 @@ def editar_objetivo(request, objetivo_id):
             'form': form,
             'titulo': 'Editar objetivo'
         }
+    )
+
+
+def registro(request):
+    """ Permite que un usuario cree una cuenta.
+    Utilizamos UserCreationForm, proporcionado por Django,
+    para gestionar y validar el nombre de usuario y la contraseña. """
+
+    if request.method == 'POST':
+
+        # Recibimos los datos enviados por el usuario.
+        form = UserCreationForm(request.POST)
+
+        # Comprobamos si los datos cumplen las validaciones de Django.
+        if form.is_valid():
+            # Guardamos el nuevo usuario en la base de datos.
+            form.save()
+            # Mostramos un mensaje de confirmación.
+            messages.success(
+                request,
+                'Tu cuenta se ha creado correctamente. '
+                'Ya puedes iniciar sesión.'
+            )
+            # Después del registro, enviamos al usuario al login.
+            return redirect('login')
+
+    else:
+        # Si el usuario acaba de entrar en la página,
+        # mostramos un formulario vacío.
+        form = UserCreationForm()
+
+    # Mostramos el formulario de registro.
+    return render(
+        request,
+        'registration/register.html',
+        {'form': form}
     )

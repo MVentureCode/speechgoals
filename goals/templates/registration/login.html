@@ -1,0 +1,31 @@
+{% extends 'goals/base.html' %}
+
+{% block contenido %}
+
+    <!-- Esta plantilla muestra el formulario de inicio de sesión.
+    Django proporciona automáticamente la variable 'form'
+    porque utilizamos sus vistas de autenticación.-->
+    <h2>Iniciar sesión</h2>
+
+    <!-- Utilizamos POST porque vamos a enviar al servidor
+    el usuario y la contraseña. -->
+    <form method="post">
+
+        <!-- Token de seguridad de Django.
+        Es obligatorio en formularios que utilizan POST.
+        Protege contra ataques CSRF. -->
+        {% csrf_token %}
+
+        <!-- Django genera automáticamente los campos del formulario:
+        - Nombre de usuario
+        - Contraseña -->
+        {{ form.as_p }}
+
+        <!-- Botón que envía las credenciales -->
+        <button type="submit">
+            Iniciar sesión
+        </button>
+
+    </form>
+
+{% endblock %}
