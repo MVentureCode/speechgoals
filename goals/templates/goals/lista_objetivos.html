@@ -268,6 +268,48 @@ ya filtrada y ordenada por la vista -->
 
     {% endfor %}
 
+    <!-- =====================================================
+     PAGINACIÓN
+     ===================================================== -->
+
+<!-- Comprobamos si existen varias páginas.
+     Si solo hay una, no necesitamos mostrar
+     los botones de navegación. -->
+
+{% if objetivos.has_other_pages %}
+
+    <nav aria-label="Navegación de páginas">
+
+        <!-- BOTÓN ANTERIOR -->
+        {% if objetivos.has_previous %}
+
+            <a href="?q={{ busqueda|default:'' }}&area={{ area_seleccionada|default:'' }}&edad={{ edad_seleccionada|default:'' }}&order={{ orden }}&dir={{ direccion }}&page={{ objetivos.previous_page_number }}">
+                ← Anterior
+            </a>
+
+        {% endif %}
+
+
+        <!-- INFORMACIÓN DE LA PÁGINA ACTUAL -->
+        <span>
+            Página {{ objetivos.number }}
+            de {{ objetivos.paginator.num_pages }}
+        </span>
+
+
+        <!-- BOTÓN SIGUIENTE -->
+        {% if objetivos.has_next %}
+
+            <a href="?q={{ busqueda|default:'' }}&area={{ area_seleccionada|default:'' }}&edad={{ edad_seleccionada|default:'' }}&order={{ orden }}&dir={{ direccion }}&page={{ objetivos.next_page_number }}">
+                Siguiente →
+            </a>
+
+        {% endif %}
+
+    </nav>
+
+{% endif %}
+
 </ul>
 
 {% endblock %}

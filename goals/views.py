@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
+from django.core.paginator import Paginator
 
 from .models import Paciente, Objetivo, Diagnostico, AREA_CHOICES
 from .forms import ObjetivoForm
@@ -64,15 +65,12 @@ def detalle_paciente(request, paciente_id):
 # =========================================================
 
 def lista_objetivos(request):
-    """
-    Muestra el catálogo de objetivos.
-
+    """Muestra el catálogo de objetivos.
     Permite:
     - buscar por texto
     - filtrar por área
     - filtrar por edad
-    - ordenar los resultados
-    """
+    - ordenar los resultados"""
 
     # =====================================================
     # 1. RECUPERAR LOS PARÁMETROS DE LA URL
@@ -87,7 +85,6 @@ def lista_objetivos(request):
     busqueda = request.GET.get('q')
     area_seleccionada = request.GET.get('area')
     edad_seleccionada = request.GET.get('edad')
-
 
     # =====================================================
     # 2. OBTENER TODOS LOS OBJETIVOS
@@ -112,7 +109,6 @@ def lista_objetivos(request):
             descripcion__icontains=busqueda
         )
 
-
     # =====================================================
     # 4. FILTRO POR ÁREA
     # =====================================================
@@ -124,7 +120,6 @@ def lista_objetivos(request):
         objetivos = objetivos.filter(
             area=area_seleccionada
         )
-
 
     # =====================================================
     # 5. FILTRO POR EDAD
@@ -146,7 +141,6 @@ def lista_objetivos(request):
             edad_maxima__gte=edad_seleccionada,
         )
 
-
     # =====================================================
     # 6. ORDENACIÓN
     # =====================================================
@@ -154,8 +148,7 @@ def lista_objetivos(request):
     # Recuperamos de la URL el campo por el que
     # queremos ordenar.
 
-    # Ejemplo:
-    # ?order=dificultad
+    # Ejemplo: ?order=dificultad
 
     # Si no se indica ningún campo,
     # utilizamos 'area' como orden por defecto.
@@ -231,13 +224,37 @@ def lista_objetivos(request):
         campo_orden
     )
 
+    # =====================================================
+    # 9. PAGINACIÓN
+    # =====================================================
+
+    # Paginator divide los resultados en páginas.
+    # En este caso mostramos 10 objetivos por página.
+
+    paginador = Paginator(objetivos, 10)
+
+    # Recuperamos de la URL el número de página.
+    # Ejemplo: /objetivos/?page=2
+    # Si no se indica ninguna página, utilizamos la página 1.
+
+    numero_pagina = request.GET.get(
+        'page',
+        1
+    )
+
+    # Obtenemos los objetivos correspondientes
+    # a la página solicitada.
+
+    pagina_objetivos = paginador.get_page(
+        numero_pagina
+    )
+
 
     # =====================================================
-    # 9. CONTEXTO PARA EL TEMPLATE
+    # 10. CONTEXTO PARA EL TEMPLATE
     # =====================================================
 
     # Enviamos al HTML:
-    #
     # - los objetivos encontrados
     # - las áreas disponibles
     # - los filtros seleccionados
@@ -246,7 +263,7 @@ def lista_objetivos(request):
     # - la dirección seleccionada
 
     contexto = {
-        'objetivos': objetivos,
+        'objetivos': pagina_objetivos,
         'areas': AREA_CHOICES,
         'area_seleccionada': area_seleccionada,
         'edad_seleccionada': edad_seleccionada,
@@ -255,16 +272,13 @@ def lista_objetivos(request):
         'direccion': direccion,
     }
 
-
     # Finalmente mostramos el template
     # lista_objetivos.html.
-
     return render(
         request,
         'goals/lista_objetivos.html',
         contexto
     )
-
 
 def detalle_objetivo(request, objetivo_id):
     """
