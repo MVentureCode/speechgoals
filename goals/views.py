@@ -1,5 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Paciente, Objetivo, Diagnostico, AREA_CHOICES
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
 def lista_pacientes(request):
@@ -72,3 +74,57 @@ def detalle_objetivo(request, objetivo_id):
     # Django devuelve automáticamente una página de error 404
     objetivo = get_object_or_404(Objetivo, id=objetivo_id)
     return render(request, 'goals/detalle_objetivo.html', {'objetivo': objetivo})
+
+
+@login_required
+def crear_objetivo(request):
+    """Permite crear un nuevo objetivo terapéutico."""
+    if request.method == 'POST':
+        form = ObjetivoForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                'El objetivo se ha creado correctamente.'
+            )
+            return redirect('goals:lista_objetivos')
+    else:
+        form = ObjetivoForm()
+
+    return render(
+        request,
+        'goals/objetivo_form.html',
+        {'form': form, 'titulo': 'Crear objetivo'}
+    )
+
+
+@login_required
+def editar_objetivo(request, objetivo_id):
+    """Permite editar un objetivo existente."""
+    objetivo = get_object_or_404(Objetivo, id=objetivo_id)
+
+    if request.method == 'POST':
+        form = ObjetivoForm(request.POST, instance=objetivo)
+
+        if form.is_valid():
+            form.save()
+            messages.success(
+                request,
+                'El objetivo se ha actualizado correctamente.'
+            )
+            return redirect(
+                'goals:detalle_objetivo',
+                objetivo_id=objetivo.id
+            )
+    else:
+        form = ObjetivoForm(instance=objetivo)
+
+    return render(
+        request,
+        'goals/objetivo_form.html',
+        {
+            'form': form,
+            'titulo': 'Editar objetivo'
+        }
+    )
