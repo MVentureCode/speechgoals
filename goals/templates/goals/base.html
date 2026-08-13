@@ -1,69 +1,58 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
-    <!-- Permite que la página se adapte a móviles y tablets -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SpeechGoals</title>
+    <title>{% block titulo %}SpeechGoals{% endblock %}</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
+<body class="bg-slate-50 min-h-screen text-slate-800 font-sans antialiased flex flex-col">
 
-<body>
-<header>
-    <h1>SpeechGoals</h1>
-    <nav>
-        <!-- Enlace público al catálogo de objetivos.
-        Todos los visitantes pueden consultar los objetivos. -->
-        <a href="{% url 'goals:lista_objetivos' %}">
-            Catálogo de objetivos
-        </a>
-        {% if user.is_authenticated %}
-            <!-- Este enlace solo aparece si el usuario
-            ha iniciado sesión. -->
-            <a href="{% url 'goals:crear_objetivo' %}">
-                Crear objetivo
+    <!-- BARRA DE NAVEGACIÓN SUPERIOR -->
+    <header class="bg-white border-b border-slate-100 shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            
+            <!-- Logo / Título -->
+            <a href="{% url 'goals:lista_objetivos' %}" class="font-extrabold text-xl text-teal-600 tracking-tight flex items-center gap-2">
+                <span></span> SpeechGoals
             </a>
-            <!-- Django nos proporciona user.username
-            con el nombre del usuario autenticado. -->
-            <span>
-                Usuario: {{ user.username }}
-            </span>
-            <!-- Formulario para cerrar sesión.
-            Utilizamos POST para enviar la acción de logout. -->
-            <form method="post"
-                  action="{% url 'logout' %}"
-                  style="display: inline;">
-                {% csrf_token %}
-                <button type="submit">
-                    Cerrar sesión
-                </button>
-            </form>
 
-        {% else %}
-            <!--  Estas opciones aparecen cuando el usuario
-            todavía NO ha iniciado sesión. -->
-            <a href="{% url 'login' %}">
-                Iniciar sesión
-            </a>
-            <a href="{% url 'goals:registro' %}">
-                Registrarse
-            </a>
-        {% endif %}
-    </nav>
-    <hr>
-</header>
+            <!-- Enlaces de navegación y autenticación -->
+            <nav class="flex items-center gap-6 text-sm font-medium text-slate-600">
+                <a href="{% url 'goals:lista_objetivos' %}" class="hover:text-teal-600 transition">Objetivos</a>
 
-<main>
-    <!-- Bloque de contenido.
-    Las plantillas hijas como:
-    - lista_objetivos.html
-    - detalle_objetivo.html
-    - objetivo_form.html
-    - login.html
-    - register.html
-    tendrán aquí su contenido específico. -->
-    {% block contenido %}
-    {% endblock %}
-</main>
+                {% if user.is_authenticated %}
+                    <!-- Opciones si el usuario ha iniciado sesión -->
+                    <a href="{% url 'goals:crear_objetivo' %}" class="bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold px-4 py-2 rounded-xl transition text-xs border border-teal-200">
+                        + Nuevo objetivo
+                    </a>
+                    
+                    <form action="{% url 'logout' %}" method="post" class="inline">
+                        {% csrf_token %}
+                        <button type="submit" class="hover:text-red-600 transition">Cerrar sesión</button>
+                    </form>
+                {% else %}
+                    <!-- Opciones si el usuario NO ha iniciado sesión -->
+                    <a href="{% url 'login' %}" class="hover:text-teal-600 transition">Iniciar sesión</a>
+                    <a href="{% url 'goals:registro' %}" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-4 py-2 rounded-xl transition shadow-sm text-xs">
+                        Registrarse
+                    </a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-6 py-8">
+        {% block contenido %}
+        {% endblock %}
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-white border-t border-slate-100 py-6 text-center text-xs text-slate-400">
+        SpeechGoals &copy; 2026
+    </footer>
+
 </body>
 </html>

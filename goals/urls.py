@@ -13,6 +13,8 @@ urlpatterns = [
     # Ruta raíz del sitio: muestra directamente el catálogo de objetivos.
     # Reutiliza la misma vista que 'objetivos/' para evitar un 404 al entrar directamente al dominio.
     path('', views.lista_objetivos, name='inicio'),
+    # Ruta para eliminar un objetivo específico, identificable por su clave primaria (pk).
+    path('objetivo/<int:pk>/eliminar/', views.eliminar_objetivo, name='eliminar_objetivo'),
 
     # --- Rutas de apoyo: Paciente ---
     # No están enlazadas desde el menú principal, pero permiten consultar
@@ -44,7 +46,7 @@ urlpatterns = [
         name='detalle_objetivo'
     ),
 
-    # --- Rutas para crear y editar objetivos ---
+    # --- Rutas para crear, editar  y eliminar objetivos ---
     # Estas acciones requieren que el usuario haya iniciado sesión.
     # La protección se realiza en views.py mediante @login_required.
 
@@ -63,6 +65,16 @@ urlpatterns = [
         views.editar_objetivo,
         name='editar_objetivo'
     ),
+
+    # Permite eliminar un objetivo existente.
+    # <int:objetivo_id> indica qué objetivo queremos eliminar.
+    # Ejemplo: /objetivos/eliminar/5/
+    path(
+    'objetivos/eliminar/<int:objetivo_id>/',
+    views.eliminar_objetivo,
+    name='eliminar_objetivo'
+),
+
 
     # --- Registro de usuarios ---
     # Permite que un usuario cree una cuenta nueva.

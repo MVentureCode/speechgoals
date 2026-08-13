@@ -1,36 +1,71 @@
 {% extends 'goals/base.html' %}
 
+{% block titulo %}{{ titulo }}{% endblock %}
+
 {% block contenido %}
+<div class="max-w-2xl mx-auto">
 
-    <!-- Este template sirve tanto para crear como para editar un objetivo terapéutico.
+    <!-- CABECERA -->
+    <div class="mb-8">
+        <h2 class="text-3xl font-extrabold text-slate-800 tracking-tight">{{ titulo }}</h2>
+        <p class="text-slate-500 mt-2">Completa los campos para {% if 'Editar' in titulo %}actualizar{% else %}dar de alta{% endif %} tu objetivo terapéutico.</p>
+    </div>
 
-    La variable 'titulo' viene desde views.py y nos permite mostrar un título diferente 
-    según la operación. -->
-    <h2>{{ titulo }}</h2>
+    <!-- FORMULARIO -->
+    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
 
-    <!-- Utilizamos POST porque estamos enviando información 
-    al servidor para crear o modificar un registro. -->
-    <form method="post">
+            <!-- Renderizado del formulario con estilos CSS -->
+            <div class="space-y-4">
+                {% for field in form %}
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-bold uppercase tracking-wider text-slate-500">
+                            {{ field.label }}
+                        </label>
+                        
+                        {{ field }}
+                        
+                        {% if field.help_text %}
+                            <span class="text-xs text-slate-400">{{ field.help_text }}</span>
+                        {% endif %}
+                        {% if field.errors %}
+                            <p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
 
-        <!-- Token de seguridad obligatorio en formularios POST
-        de Django. Protege contra ataques CSRF. -->
-        {% csrf_token %}
+            <!-- BOTONES -->
+            <div class="flex items-center gap-4 pt-4">
+                <button type="submit" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-6 py-2.5 rounded-xl text-sm transition shadow-sm active:scale-95">
+                    Guardar objetivo
+                </button>
+                <a href="{% url 'goals:lista_objetivos' %}" class="text-slate-500 hover:text-slate-800 text-sm font-medium transition">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
 
-        <!-- Django genera automáticamente los campos definidos
-        en ObjetivoForm. -->
-        {{ form.as_p }}
+</div>
 
-        <!-- Botón para enviar el formulario -->
-        <button type="submit">
-            Guardar objetivo
-        </button>
-
-    </form>
-
-    <!-- Si el usuario decide no guardar los cambios,
-    puede volver al catálogo. -->
-    <a href="{% url 'goals:lista_objetivos' %}">
-        Cancelar
-    </a>
-
+<!-- CSS LIMPIO PARA LOS INPUTS DE DJANGO -->
+<style>
+    input, select, textarea {
+        width: 100%;
+        background-color: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 0.75rem;
+        padding: 0.625rem 1rem;
+        font-size: 0.875rem;
+        transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+        outline: none;
+        border-color: #2dd4bf;
+        box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2);
+        background-color: #ffffff;
+    }
+</style>
 {% endblock %}

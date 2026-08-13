@@ -1,28 +1,46 @@
-<!-- 
-    detalle_objetivo.html
-    Plantilla de detalle del modelo principal (Objetivo).
-    Hereda la estructura común desde base.html mediante extends.
--->
 {% extends 'goals/base.html' %}
 
-<!-- Sobrescribimos el bloque 'titulo' definido en base.html,
-     usando la descripción del objetivo como título de la pestaña -->
 {% block titulo %}{{ objetivo.descripcion }}{% endblock %}
 
 {% block contenido %}
-    <h2>{{ objetivo.descripcion }}</h2>
+<div class="max-w-2xl mx-auto space-y-6">
 
-    <ul>
-        <!-- get_area_display y get_dificultad_display son métodos automáticos
-             que genera Django para campos con 'choices': devuelven el texto
-             legible (ej. "Lenguaje") en lugar del valor guardado en la base
-             de datos (ej. "lenguaje") -->
-        <li><strong>Área:</strong> {{ objetivo.get_area_display }}</li>
-        <li><strong>Dificultad:</strong> {{ objetivo.get_dificultad_display }}</li>
-        <li><strong>Edad recomendada:</strong> de {{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años</li>
-    </ul>
+    <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 space-y-6">
+        
+        <div class="flex items-center justify-between">
+            <span class="bg-teal-50 text-teal-800 text-xs font-bold px-3 py-1 rounded-full border border-teal-100">
+                {{ objetivo.get_area_display }}
+            </span>
+            <span class="bg-slate-100 text-slate-600 text-xs font-semibold px-3 py-1 rounded-full">
+                Dificultad: {{ objetivo.get_dificultad_display }}
+            </span>
+        </div>
 
-    <!-- Enlace de vuelta al listado, generado con {% url %} a partir
-         del 'name' definido en urls.py -->
-    <a href="{% url 'goals:lista_objetivos' %}">← Volver al catálogo</a>
+        <div>
+            <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">{{ objetivo.descripcion }}</h2>
+        </div>
+
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between text-sm">
+            <span class="text-slate-500 font-medium">Edad recomendada:</span>
+            <span class="text-slate-800 font-bold">{{ objetivo.edad_minima }} a {{ objetivo.edad_maxima }} años</span>
+        </div>
+
+        <div class="flex items-center justify-between pt-4 border-t border-slate-100">
+            <a href="{% url 'goals:lista_objetivos' %}" class="text-slate-500 hover:text-teal-600 text-sm font-medium transition">
+                ← Volver al catálogo
+            </a>
+
+            {% if user.is_authenticated %}
+                <a href="{% url 'goals:editar_objetivo' objetivo.id %}" class="bg-teal-500 hover:bg-teal-600 text-white font-semibold px-5 py-2 rounded-xl text-sm transition shadow-sm">
+                    Editar objetivo
+                </a>
+                <a href="{% url 'goals:eliminar_objetivo' objetivo.id %}" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-5 py-2 rounded-xl text-sm transition shadow-sm">
+                    Eliminar objetivo
+                </a>
+            {% endif %}
+        </div>
+
+    </div>
+
+</div>
 {% endblock %}
